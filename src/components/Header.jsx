@@ -5,17 +5,24 @@ const Header = () => {
     <header className="z-10 w-full py-5 px-6 text-sm sm:text-base">
       <nav className="w-full flex justify-between">
         <div>
-          <strong>Algorithm Visulaizer Sandbox</strong>
+          <strong>Algorithm Visualizer Sandbox</strong>
         </div>
-        <div className="flex cursor-pointer">
-          <div className="flex px-0 cursor-pointer">
-            <strong className="px-1">Algorithm type: </strong> Sorting
+
+        <div className="flex flex-row items-center">
+          <div className="flex">
+            <strong className="mx-2">Algorithm Type:</strong>
           </div>
-          {/* <div className="px-2 bg-gray-800 absolute right-2 opacity-0">
-            {algorithmList.map((algo,i) => (
-              <p key={i}>{algo}</p>
+
+          <select
+            className="p-1 bg-gray-800 rounded-md"
+            defaultValue={0}
+          >
+            {algorithmList.map((algo, index) => (
+              <option key={index} value={algo} className="text-green-400">
+                {algo}
+              </option>
             ))}
-          </div> */}
+          </select>
         </div>
       </nav>
     </header>
