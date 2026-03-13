@@ -7,12 +7,14 @@ import { useState } from "react";
 const App = () => {
     const [array, setArray] = useState([5]);
     const [algorithm, setAlgorithm] = useState();
-    const [arraySize, setArraySize] = useState(5);
+    const [arraySize, setArraySize] = useState(10);
+    const [speed , setSpeed]  = useState(10);
 
   return (
     <main className="bg-gray-900 overflow-hidden">
       <Header />
-      <ControlPanel array={array} setArray={setArray} algorithm={algorithm} arraySize={arraySize} setArraySize={setArraySize} setAlgorithm={setAlgorithm}/>
+      {/* TODO: Organize the props below*/}
+      <ControlPanel array={array} setArray={setArray} algorithm={algorithm} arraySize={arraySize} setArraySize={setArraySize} setAlgorithm={setAlgorithm} speed ={speed} setSpeed={setSpeed}/>
       <VisualizationCanvas array={array}/>
       <Controls />
       <Footer />
