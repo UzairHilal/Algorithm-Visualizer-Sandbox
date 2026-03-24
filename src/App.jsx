@@ -8,7 +8,7 @@ const App = () => {
     const [array, setArray] = useState([5]);
     const [algorithm, setAlgorithm] = useState();
     const [arraySize, setArraySize] = useState(10);
-    const [speed , setSpeed]  = useState(10);
+    const [speed , setSpeed]  = useState(1);
 
   return (
     <main className="bg-gray-900 overflow-hidden">

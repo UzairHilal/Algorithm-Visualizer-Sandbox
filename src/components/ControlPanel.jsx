@@ -1,46 +1,54 @@
 import { useEffect } from "react";
 import { generateRandomArray } from "../constants";
 import { bubbleSort } from "../algorithmsTest/Sorting/BubbleSort";
-
+import { selectionSort } from "../algorithmsTest/Sorting/SelectionSort";
+import { comparisonAnimation } from "../engine/animations";
+import { swapBars } from "../engine/animations";
 // import { animations } from "../algorithmsTest/Sorting/BubbleSort";
 
 let swapped = false;
 let animations = [];
+let bars = [];
 
-const sorting = (speed) => {
-  const bars = document.getElementsByClassName("bars");
-
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sorting = async (speed) => {
+  bars = Array.from(document.getElementsByClassName("bars"));
   for (let i = 0; i <= animations.length - 1; i++) {
-    setTimeout(() => {
-      bars[animations[i].comparison[0]].style.backgroundColor = "red";
-      bars[animations[i].comparison[1]].style.backgroundColor = "red";
-
-      if (animations[i].swap) {
-        setTimeout(() => {
-          const tempHeight = bars[animations[i].comparison[0]].style.height;
-          bars[animations[i].comparison[0]].style.height =
-            bars[animations[i].comparison[1]].style.height;
-
-          bars[animations[i].comparison[1]].style.height = tempHeight;
-        }, i * speed);
-      }
-      setTimeout(() => {
-        bars[animations[i].comparison[0]].style.backgroundColor = "#0092b8";
-        bars[animations[i].comparison[1]].style.backgroundColor = "#0092b8";
-      }, i * speed);
-    }, i * speed);
+    comparisonAnimation(
+      bars[animations[i].comparison[0]],
+      bars[animations[i].comparison[1]],
+      speed
+    );
+    await sleep((1 / speed) * 1000);
+    if (animations[i].swap) {
+      await swapBars(
+        bars[animations[i].comparison[0]],
+        bars[animations[i].comparison[1]],
+        speed
+      );
+      [bars[animations[i].comparison[0]], bars[animations[i].comparison[1]]] = [
+        bars[animations[i].comparison[1]],
+        bars[animations[i].comparison[0]],
+      ];
+    }
   }
   swapped = true;
 };
 
 const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
   useEffect(() => {
-    setArray(generateRandomArray(arraySize));
+    setArray(generateRandomArray(arraySize, bars));
   }, []);
 
-  const handleSort = () => {
+  const handleBubbleSort = () => {
     if (!swapped) {
       bubbleSort(array, animations);
+      sorting(speed);
+    }
+  };
+  const handleSelectionSort = () => {
+    if (!swapped) {
+      selectionSort(array, animations);
       sorting(speed);
     }
   };
@@ -52,7 +60,7 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
           onClick={() => {
             swapped = false;
             animations = [];
-            setArray(generateRandomArray(arraySize));
+            setArray(generateRandomArray(arraySize, bars));
           }}
           className="bg-indigo-300 rounded-md p-1 text-black "
         >
@@ -68,7 +76,7 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
             max={30}
             onChange={(e) => {
               setArraySize(e.target.value);
-              setArray(generateRandomArray(arraySize));
+              setArray(generateRandomArray(e.target.value, bars));
               swapped = false;
               animations = [];
             }}
@@ -82,10 +90,18 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
         <button
           className="bg-indigo-300 rounded-md p-1 text-black "
           onClick={() => {
-            handleSort();
+            handleSelectionSort();
           }}
         >
-          Sort
+          Selection Sort
+        </button>
+        <button
+          className="bg-indigo-300 rounded-md p-1 text-black "
+          onClick={() => {
+            handleBubbleSort();
+          }}
+        >
+          Bubble Sort
         </button>
       </div>
     </div>
