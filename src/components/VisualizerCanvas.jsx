@@ -3,8 +3,7 @@ import gsap from "gsap";
 import { useRef } from "react";
 
 
-const VisualizerCanvas = ({ array }) => {
-  // const randomArray = [10,20,80,40,30,20,34];
+const VisualizerCanvas = ({ array, arraySize }) => {
   const randomArray = array;
   const maxValueInArray = Math.max(...randomArray);
 
@@ -43,15 +42,17 @@ const VisualizerCanvas = ({ array }) => {
             //   width: `${450 / randomArray.length}px`,
             // }}
           >
-            <p className="lg:opacity-100 opacity-0 absolute lg:-top-6">
+            <p  className={`w-9 h-9 opacity-100 absolute -bottom-[80px] flex justify-center items-center transition-all ${arraySize >= 11 ? `-rotate-45 text-[10px] border-none` : `rotate-0`} border-2 p-2 border-gray-700  text-gray-200`}>
               {elem}
             </p>
           </div>
         ))}
       </div>
 
+      <div className="w-full sm:h-40 py-10 flex justify-center flex-wrap "></div>
+
       {/* array display */}
-      <div className="w-full h-56 sm:h-40 py-10 flex justify-center flex-wrap ">
+      {/* <div className="w-full h-56 sm:h-40 py-10 flex justify-center flex-wrap ">
         {randomArray.map((elem, i) => (
           <div
             key={i}
@@ -63,7 +64,7 @@ const VisualizerCanvas = ({ array }) => {
             {elem}
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

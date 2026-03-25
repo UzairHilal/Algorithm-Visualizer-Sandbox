@@ -15,7 +15,7 @@ const App = () => {
       <Header />
       {/* TODO: Organize the props below*/}
       <ControlPanel array={array} setArray={setArray} algorithm={algorithm} arraySize={arraySize} setArraySize={setArraySize} setAlgorithm={setAlgorithm} speed ={speed} setSpeed={setSpeed}/>
-      <VisualizationCanvas array={array}/>
+      <VisualizationCanvas array={array} arraySize={arraySize}/>
       <Controls />
       <Footer />
     </main>
