@@ -2,8 +2,8 @@ import { algorithmList } from "../constants";
 
 const Header = () => {
   return (
-    <header className="z-10 w-full py-5 px-6 text-sm sm:text-base">
-      <nav className="w-full flex justify-between">
+    <header className="z-10 w-full py-2 px-6 text-sm sm:text-base">
+      <nav className="w-full flex justify-between items-center">
         <div>
           <strong>Algorithm Visualizer Sandbox</strong>
         </div>

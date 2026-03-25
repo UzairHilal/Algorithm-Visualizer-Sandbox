@@ -31,7 +31,7 @@ const VisualizerCanvas = ({ array, arraySize }) => {
             id="bars"
             data-height={`${elem / ((0.2 / 100) * maxValueInArray)}`}
             ref={(el) => (barsRef.current[i] = el)}
-            className={`bars max-w-20 sm:px-2 md:px-2 lg:px-3 border border-black rounded-t-sm bg-cyan-600 flex items-end justify-center relative `}
+            className={`bars max-w-20 border border-black rounded-t-sm bg-cyan-600 flex items-end justify-center relative `}
             key={i}
             style={{
               // height: `${elem / ((0.2 / 100) * maxValueInArray)}px`,
@@ -49,22 +49,7 @@ const VisualizerCanvas = ({ array, arraySize }) => {
         ))}
       </div>
 
-      <div className="w-full sm:h-40 py-10 flex justify-center flex-wrap "></div>
-
-      {/* array display */}
-      {/* <div className="w-full h-56 sm:h-40 py-10 flex justify-center flex-wrap ">
-        {randomArray.map((elem, i) => (
-          <div
-            key={i}
-            className={` w-auto h-9 relative px-1 border-2 border-gray-400 text-gray-400 mx-1 my-3`}
-          >
-            <span className="border absolute -top-5 w-4 h-4 text-xs rounded-md bg-white text-black font-bold flex items-center justify-center">
-              {i}
-            </span>
-            {elem}
-          </div>
-        ))}
-      </div> */}
+      <div className="w-full h-40 py-10 flex justify-center"></div>
     </div>
   );
 };
