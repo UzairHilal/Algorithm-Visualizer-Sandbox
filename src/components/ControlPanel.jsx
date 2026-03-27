@@ -4,35 +4,36 @@ import { bubbleSort } from "../algorithmsTest/Sorting/BubbleSort";
 import { selectionSort } from "../algorithmsTest/Sorting/SelectionSort";
 import { comparisonAnimation } from "../engine/animations";
 import { swapBars } from "../engine/animations";
+import gsap from "gsap";
 // import { animations } from "../algorithmsTest/Sorting/BubbleSort";
 
 let swapped = false;
 let animations = [];
 let bars = [];
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const sorting = async (speed) => {
+// const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const masterTl = gsap.timeline({ paused: true });
+const sorting = (speed) => {
   bars = Array.from(document.getElementsByClassName("bars"));
+  const tempBars = [...bars];
   for (let i = 0; i <= animations.length - 1; i++) {
-    comparisonAnimation(
-      bars[animations[i].comparison[0]],
-      bars[animations[i].comparison[1]],
-      speed
-    );
-    await sleep((1 / speed) * 1000);
+    const [bar1Index, bar2Index] = animations[i].comparison;
+
+    const barA = tempBars[bar1Index];
+    const barB = tempBars[bar2Index];
+
+    masterTl.add(comparisonAnimation(barA, barB, speed, "comparison"));
     if (animations[i].swap) {
-      await swapBars(
-        bars[animations[i].comparison[0]],
-        bars[animations[i].comparison[1]],
-        speed
-      );
-      [bars[animations[i].comparison[0]], bars[animations[i].comparison[1]]] = [
-        bars[animations[i].comparison[1]],
-        bars[animations[i].comparison[0]],
+      masterTl.add(comparisonAnimation(barA, barB, speed, "swap"));
+      [tempBars[bar1Index], tempBars[bar2Index]] = [
+        tempBars[bar2Index],
+        tempBars[bar1Index],
       ];
     }
+    // swapped = true;
   }
-  swapped = true;
+
+  return masterTl;
 };
 
 const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
@@ -43,13 +44,15 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
   const handleBubbleSort = () => {
     if (!swapped) {
       bubbleSort(array, animations);
-      sorting(speed);
+      const masterTl = sorting(speed);
+      masterTl.play();
     }
   };
   const handleSelectionSort = () => {
     if (!swapped) {
       selectionSort(array, animations);
-      sorting(speed);
+      const masterTl = sorting(speed);
+      masterTl.play();
     }
   };
 
@@ -102,6 +105,24 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
           }}
         >
           Bubble Sort
+        </button>
+        <button
+          className="bg-indigo-300 rounded-md p-1 text-black "
+          onClick={() => {
+            masterTl.seek(masterTl.time() + 1);
+            masterTl.pause()
+          }}
+          >
+          +
+        </button>
+        <button
+          className="bg-indigo-300 rounded-md p-1 text-black "
+          onClick={() => {
+            masterTl.pause()
+            masterTl.seek(masterTl.time() - 1);
+          }}
+        >
+          -
         </button>
       </div>
     </div>
