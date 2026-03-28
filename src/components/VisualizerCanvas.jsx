@@ -32,7 +32,7 @@ const VisualizerCanvas = ({ array, arraySize }) => {
         arraySize={arraySize}
       />
 
-      <div className="w-full h-40 py-10 flex justify-center"></div>
+      <div className="w-full py-8 flex justify-center bg-gray-900 border-2 border-gray-800"></div>
     </div>
   );
 };

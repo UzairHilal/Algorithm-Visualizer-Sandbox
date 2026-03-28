@@ -9,6 +9,8 @@ let swapped = false;
 let animations = [];
 let bars = [];
 
+let currentStep = 0;
+
 const masterTl = gsap.timeline({ paused: true });
 const sorting = (speed) => {
   bars = Array.from(document.getElementsByClassName("bars"));
@@ -20,15 +22,11 @@ const sorting = (speed) => {
     const barA = tempBars[bar1Index];
     const barB = tempBars[bar2Index];
 
-    masterTl.add(comparisonAnimation(barA, barB, speed, "comparison",masterTl, i));
-
-    
-    // if (masterTl.currentLabel(`step-${i}`)) {
-    //   masterTl.addLabel(`step-${i}`, i);
-    // }
-
+    masterTl.add(
+      comparisonAnimation(barA, barB, speed, "comparison", masterTl, i)
+    );
     if (animations[i].swap) {
-      masterTl.add(comparisonAnimation(barA, barB, speed, "swap",masterTl, i));
+      masterTl.add(comparisonAnimation(barA, barB, speed, "swap", masterTl, i));
       [tempBars[bar1Index], tempBars[bar2Index]] = [
         tempBars[bar2Index],
         tempBars[bar1Index],
@@ -36,7 +34,7 @@ const sorting = (speed) => {
     }
     swapped = true;
   }
-
+  console.log(masterTl.duration());
   return masterTl;
 };
 
@@ -44,7 +42,7 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
   useEffect(() => {
     setArray(generateRandomArray(arraySize, bars));
   }, []);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStateStep, setCurrentStateStep] = useState(currentStep);
 
   const handleBubbleSort = () => {
     if (!swapped) {
@@ -58,18 +56,21 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
     if (!swapped) {
       selectionSort(array, animations);
       const masterTl = sorting(speed);
+      masterTl.duration(5);
       masterTl.play();
     }
   };
 
   return (
-    <div className="z-10 w-full py-3 flex bg-gray-800 ">
+    <div className="z-10 w-full py-3 flex bg-gray-800 overflow-hidden">
       <div className="w-full px-6 flex justify-between text-sm font-bold">
         <button
           onClick={() => {
             swapped = false;
             animations = [];
             setArray(generateRandomArray(arraySize, bars));
+            currentStep = 0;
+            setCurrentStateStep(0);
           }}
           className="bg-indigo-300 rounded-md p-1 text-black "
         >
@@ -87,6 +88,8 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
               setArray(generateRandomArray(e.target.value, bars));
               swapped = false;
               animations = [];
+              currentStep = 0;
+              setCurrentStateStep(0);
             }}
             className="accent-indigo- 300 w-20 size-1 mx-2"
           />
@@ -109,30 +112,32 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
         >
           Bubble Sort
         </button>
-        <input
-          className=" bg-indigo-300 rounded-md p-1 text-black "
-          type="range"
-          defaultValue={0}
-          step={1}
-          min={0}
-          max={430}
-          onChange={(e) => {
-            setCurrentStep(e.target.value);
-              masterTl.seek(masterTl.tweenTo(`step-${e.target.value}`)).pause()
-            masterTl.duration(0);
-          }}
-        />
-        +
-        {/* <button
+        {/* playback contorl buttons */}
+
+        {/* TODO: Fix Bug / When + is pressed the 2nd step is displayed not the first */}
+        <button
           className="bg-indigo-300 rounded-md p-1 text-black "
           onClick={() => {
-            setCurrentStep(currentStep-0.5);
-            masterTl.progress(`${currentStep}`);
-            masterTl.pause();
+            currentStep >= 0 && (2 * currentStep + 1) < masterTl.duration() ? ++currentStep : currentStep
+            masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
+            setCurrentStateStep(currentStep);
+            masterTl.duration(0);
           }}
         >
-          -{currentStep}
-        </button> */}
+          +
+        </button>
+        <button
+          className="bg-indigo-300 rounded-md p-1 text-black "
+          onClick={() => {
+            currentStep > 0 ? --currentStep : currentStep 
+            masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
+            setCurrentStateStep(currentStep);
+            masterTl.duration(0);
+          }}
+        >
+          -
+        </button>
+        <div>{currentStateStep}</div>
       </div>
     </div>
   );

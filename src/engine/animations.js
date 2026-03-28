@@ -8,7 +8,6 @@ export const comparisonAnimation = (
   speed,
   type,
   masterTl,
-  i
 ) => {
   const tl = gsap.timeline();
   tl.timeScale(speed);
