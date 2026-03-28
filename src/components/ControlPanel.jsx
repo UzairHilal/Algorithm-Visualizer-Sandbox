@@ -23,6 +23,8 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
       animationGenerator(speed, animations, bars, masterTl);
       masterTl.duration(5);
       masterTl.play();
+      currentStep = masterTl.duration() / 2;
+      setCurrentStateStep(masterTl.duration() / 2);
     }
   };
 
@@ -32,6 +34,8 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
       animationGenerator(speed, animations, bars, masterTl);
       masterTl.duration(5);
       masterTl.play();
+      currentStep = masterTl.duration() / 2;
+      setCurrentStateStep(masterTl.duration() / 2);
     }
   };
 
@@ -56,6 +60,7 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
             type="range"
             min={5}
             max={30}
+            defaultValue={5}
             onChange={(e) => {
               setArraySize(e.target.value);
               setArray(generateRandomArray(e.target.value, bars));
