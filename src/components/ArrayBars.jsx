@@ -9,7 +9,7 @@ const ArrayBars = ({ randomArray, maxValueInArray, barsRef, arraySize }) => {
           className={`bars max-w-20 border border-black rounded-t-sm bg-cyan-600 flex items-end justify-center relative `}
           key={i}
           style={{
-            width: `${450 / randomArray.length}px`,
+            width: `${400 / randomArray.length}px`,
           }}
         >
           <p

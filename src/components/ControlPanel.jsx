@@ -1,42 +1,15 @@
 import { useEffect, useState } from "react";
 import { generateRandomArray } from "../constants";
-import { bubbleSort } from "../algorithmsTest/Sorting/BubbleSort";
-import { selectionSort } from "../algorithmsTest/Sorting/SelectionSort";
-import { comparisonAnimation } from "../engine/animations";
+import { bubbleSort } from "../algorithms/Sorting/BubbleSort";
+import { selectionSort } from "../algorithms/Sorting/SelectionSort";
+import { animationGenerator } from "../engine/animationGenerator";
 import gsap from "gsap";
 
-let swapped = false;
+let currentStep = 0;
 let animations = [];
 let bars = [];
 
-let currentStep = 0;
-
 const masterTl = gsap.timeline({ paused: true });
-const sorting = (speed) => {
-  bars = Array.from(document.getElementsByClassName("bars"));
-  const tempBars = [...bars];
-  for (let i = 0; i <= animations.length - 1; i++) {
-    const [bar1Index, bar2Index] = animations[i].comparison;
-    console.log(animations);
-
-    const barA = tempBars[bar1Index];
-    const barB = tempBars[bar2Index];
-
-    masterTl.add(
-      comparisonAnimation(barA, barB, speed, "comparison", masterTl, i)
-    );
-    if (animations[i].swap) {
-      masterTl.add(comparisonAnimation(barA, barB, speed, "swap", masterTl, i));
-      [tempBars[bar1Index], tempBars[bar2Index]] = [
-        tempBars[bar2Index],
-        tempBars[bar1Index],
-      ];
-    }
-    swapped = true;
-  }
-  console.log(masterTl.duration());
-  return masterTl;
-};
 
 const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
   useEffect(() => {
@@ -45,17 +18,18 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
   const [currentStateStep, setCurrentStateStep] = useState(currentStep);
 
   const handleBubbleSort = () => {
-    if (!swapped) {
+    if (!masterTl.isActive()) {
       bubbleSort(array, animations);
-      const masterTl = sorting(speed);
+      animationGenerator(speed, animations, bars, masterTl);
       masterTl.duration(5);
       masterTl.play();
     }
   };
+
   const handleSelectionSort = () => {
-    if (!swapped) {
+    if (!masterTl.isActive()) {
       selectionSort(array, animations);
-      const masterTl = sorting(speed);
+      animationGenerator(speed, animations, bars, masterTl);
       masterTl.duration(5);
       masterTl.play();
     }
@@ -66,7 +40,6 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
       <div className="w-full px-6 flex justify-between text-sm font-bold">
         <button
           onClick={() => {
-            swapped = false;
             animations = [];
             setArray(generateRandomArray(arraySize, bars));
             currentStep = 0;
@@ -86,7 +59,6 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
             onChange={(e) => {
               setArraySize(e.target.value);
               setArray(generateRandomArray(e.target.value, bars));
-              swapped = false;
               animations = [];
               currentStep = 0;
               setCurrentStateStep(0);
@@ -118,7 +90,9 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
         <button
           className="bg-indigo-300 rounded-md p-1 text-black "
           onClick={() => {
-            currentStep >= 0 && (2 * currentStep + 1) < masterTl.duration() ? ++currentStep : currentStep
+            currentStep >= 0 && 2 * currentStep + 1 < masterTl.duration()
+              ? ++currentStep
+              : currentStep;
             masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
             setCurrentStateStep(currentStep);
             masterTl.duration(0);
@@ -129,7 +103,7 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
         <button
           className="bg-indigo-300 rounded-md p-1 text-black "
           onClick={() => {
-            currentStep > 0 ? --currentStep : currentStep 
+            currentStep > 0 ? --currentStep : currentStep;
             masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
             setCurrentStateStep(currentStep);
             masterTl.duration(0);

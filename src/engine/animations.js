@@ -7,11 +7,11 @@ export const comparisonAnimation = (
   secondTarget,
   speed,
   type,
-  masterTl,
+  masterTl
 ) => {
   const tl = gsap.timeline();
   tl.timeScale(speed);
-  
+
   if (type === "comparison") {
     masterTl.addLabel(`step-${currentStep}`, currentStep);
     tl.to(firstTarget, {
@@ -19,7 +19,7 @@ export const comparisonAnimation = (
       ease: "back",
       duration: 1,
     });
-    currentStep++
+    currentStep++;
     masterTl.addLabel(`step-${currentStep}`, currentStep);
     tl.to(
       secondTarget,
@@ -30,14 +30,14 @@ export const comparisonAnimation = (
       },
       "<"
     );
-    currentStep++
+    currentStep++;
     masterTl.addLabel(`step-${currentStep}`, currentStep);
     tl.to(firstTarget, {
       backgroundColor: "#0092b8",
       ease: "back",
       duration: 1,
     });
-    currentStep++
+    currentStep++;
     masterTl.addLabel(`step-${currentStep}`, currentStep);
     tl.to(
       secondTarget,
@@ -49,9 +49,9 @@ export const comparisonAnimation = (
       "<"
     );
   }
-  
+
   if (type === "swap") {
-    currentStep++
+    currentStep++;
     masterTl.addLabel(`step-${currentStep}`, currentStep);
     tl.to(firstTarget, {
       x: () => {
@@ -62,7 +62,7 @@ export const comparisonAnimation = (
       duration: 1,
       backgroundColor: "orange",
     });
-    currentStep++
+    currentStep++;
     masterTl.addLabel(`step-${currentStep}`, currentStep);
     tl.to(
       secondTarget,
@@ -77,18 +77,20 @@ export const comparisonAnimation = (
       },
       "<"
     );
-    currentStep++
+    currentStep++;
     masterTl.addLabel(`step-${currentStep}`, currentStep);
     tl.to(firstTarget, {
       duration: 1,
+      // ease: "back",
       backgroundColor: "#0092b8",
     });
-    currentStep++
+    currentStep++;
     masterTl.addLabel(`step-${currentStep}`, currentStep);
     tl.to(
       secondTarget,
       {
         duration: 1,
+        // ease: "back",
         backgroundColor: "#0092b8",
       },
       "<"
