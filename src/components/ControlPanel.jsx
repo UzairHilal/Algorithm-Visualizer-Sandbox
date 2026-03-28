@@ -1,36 +1,40 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { generateRandomArray } from "../constants";
 import { bubbleSort } from "../algorithmsTest/Sorting/BubbleSort";
 import { selectionSort } from "../algorithmsTest/Sorting/SelectionSort";
 import { comparisonAnimation } from "../engine/animations";
-import { swapBars } from "../engine/animations";
 import gsap from "gsap";
-// import { animations } from "../algorithmsTest/Sorting/BubbleSort";
 
 let swapped = false;
 let animations = [];
 let bars = [];
 
-// const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const masterTl = gsap.timeline({ paused: true });
 const sorting = (speed) => {
   bars = Array.from(document.getElementsByClassName("bars"));
   const tempBars = [...bars];
   for (let i = 0; i <= animations.length - 1; i++) {
     const [bar1Index, bar2Index] = animations[i].comparison;
+    console.log(animations);
 
     const barA = tempBars[bar1Index];
     const barB = tempBars[bar2Index];
 
-    masterTl.add(comparisonAnimation(barA, barB, speed, "comparison"));
+    masterTl.add(comparisonAnimation(barA, barB, speed, "comparison",masterTl, i));
+
+    
+    // if (masterTl.currentLabel(`step-${i}`)) {
+    //   masterTl.addLabel(`step-${i}`, i);
+    // }
+
     if (animations[i].swap) {
-      masterTl.add(comparisonAnimation(barA, barB, speed, "swap"));
+      masterTl.add(comparisonAnimation(barA, barB, speed, "swap",masterTl, i));
       [tempBars[bar1Index], tempBars[bar2Index]] = [
         tempBars[bar2Index],
         tempBars[bar1Index],
       ];
     }
-    // swapped = true;
+    swapped = true;
   }
 
   return masterTl;
@@ -40,11 +44,13 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
   useEffect(() => {
     setArray(generateRandomArray(arraySize, bars));
   }, []);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const handleBubbleSort = () => {
     if (!swapped) {
       bubbleSort(array, animations);
       const masterTl = sorting(speed);
+      masterTl.duration(5);
       masterTl.play();
     }
   };
@@ -69,7 +75,6 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
         >
           Generate Array
         </button>
-
         {/* SEt the size/length of array */}
         <div className="flex  justify-center items-center ">
           <label htmlFor="range">Array Size</label>
@@ -83,13 +88,11 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
               swapped = false;
               animations = [];
             }}
-            className="accent-indigo-300 w-20 size-1 mx-2"
+            className="accent-indigo- 300 w-20 size-1 mx-2"
           />
           <span className="text-right w-2">{arraySize}</span>
         </div>
-
         <button>Algorithm</button>
-
         <button
           className="bg-indigo-300 rounded-md p-1 text-black "
           onClick={() => {
@@ -106,24 +109,30 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
         >
           Bubble Sort
         </button>
-        <button
-          className="bg-indigo-300 rounded-md p-1 text-black "
-          onClick={() => {
-            masterTl.seek(masterTl.time() + 1);
-            masterTl.pause()
+        <input
+          className=" bg-indigo-300 rounded-md p-1 text-black "
+          type="range"
+          defaultValue={0}
+          step={1}
+          min={0}
+          max={430}
+          onChange={(e) => {
+            setCurrentStep(e.target.value);
+              masterTl.seek(masterTl.tweenTo(`step-${e.target.value}`)).pause()
+            masterTl.duration(0);
           }}
-          >
-          +
-        </button>
-        <button
+        />
+        +
+        {/* <button
           className="bg-indigo-300 rounded-md p-1 text-black "
           onClick={() => {
-            masterTl.pause()
-            masterTl.seek(masterTl.time() - 1);
+            setCurrentStep(currentStep-0.5);
+            masterTl.progress(`${currentStep}`);
+            masterTl.pause();
           }}
         >
-          -
-        </button>
+          -{currentStep}
+        </button> */}
       </div>
     </div>
   );
