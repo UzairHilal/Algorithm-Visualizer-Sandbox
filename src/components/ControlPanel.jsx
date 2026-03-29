@@ -1,75 +1,58 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { generateRandomArray } from "../constants";
-import { bubbleSort } from "../algorithmsTest/Sorting/BubbleSort";
-import { selectionSort } from "../algorithmsTest/Sorting/SelectionSort";
-import { comparisonAnimation } from "../engine/animations";
-import { swapBars } from "../engine/animations";
+import { bubbleSort } from "../algorithms/Sorting/BubbleSort";
+import { selectionSort } from "../algorithms/Sorting/SelectionSort";
+import { animationGenerator } from "../engine/animationGenerator";
+import {bars} from "../engine/animationGenerator"
 import gsap from "gsap";
-// import { animations } from "../algorithmsTest/Sorting/BubbleSort";
 
-let swapped = false;
+let currentStep = 0;
 let animations = [];
-let bars = [];
 
-// const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const masterTl = gsap.timeline({ paused: true });
-const sorting = (speed) => {
-  bars = Array.from(document.getElementsByClassName("bars"));
-  const tempBars = [...bars];
-  for (let i = 0; i <= animations.length - 1; i++) {
-    const [bar1Index, bar2Index] = animations[i].comparison;
-
-    const barA = tempBars[bar1Index];
-    const barB = tempBars[bar2Index];
-
-    masterTl.add(comparisonAnimation(barA, barB, speed, "comparison"));
-    if (animations[i].swap) {
-      masterTl.add(comparisonAnimation(barA, barB, speed, "swap"));
-      [tempBars[bar1Index], tempBars[bar2Index]] = [
-        tempBars[bar2Index],
-        tempBars[bar1Index],
-      ];
-    }
-    // swapped = true;
-  }
-
-  return masterTl;
-};
 
 const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
   useEffect(() => {
-    setArray(generateRandomArray(arraySize, bars));
-  }, []);
+    setArray(generateRandomArray(arraySize, bars, masterTl));
+  }, [arraySize, setArray]);
+  const [currentStateStep, setCurrentStateStep] = useState(currentStep);
 
   const handleBubbleSort = () => {
-    if (!swapped) {
+    if (!masterTl.isActive()) {
       bubbleSort(array, animations);
-      const masterTl = sorting(speed);
+      animationGenerator(speed, animations, masterTl);
+      masterTl.duration(speed)
       masterTl.play();
+      currentStep = masterTl.duration() / 2;
+      setCurrentStateStep(masterTl.duration() / 2);
     }
   };
+  
   const handleSelectionSort = () => {
-    if (!swapped) {
+    if (!masterTl.isActive()) {
       selectionSort(array, animations);
-      const masterTl = sorting(speed);
+      animationGenerator(speed, animations, masterTl);
+      masterTl.duration(speed)
       masterTl.play();
+      currentStep = masterTl.duration() / 2;
+      setCurrentStateStep(masterTl.duration() / 2);
     }
   };
 
   return (
-    <div className="z-10 w-full py-3 flex bg-gray-800 ">
+    <div className="z-10 w-full py-3 flex bg-gray-800 overflow-hidden">
       <div className="w-full px-6 flex justify-between text-sm font-bold">
         <button
           onClick={() => {
-            swapped = false;
             animations = [];
-            setArray(generateRandomArray(arraySize, bars));
+            setArray(generateRandomArray(arraySize, bars, masterTl));
+            currentStep = 0;
+            setCurrentStateStep(0);
           }}
           className="bg-indigo-300 rounded-md p-1 text-black "
         >
           Generate Array
         </button>
-
         {/* SEt the size/length of array */}
         <div className="flex  justify-center items-center ">
           <label htmlFor="range">Array Size</label>
@@ -77,19 +60,19 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
             type="range"
             min={5}
             max={30}
+            defaultValue={5}
             onChange={(e) => {
               setArraySize(e.target.value);
-              setArray(generateRandomArray(e.target.value, bars));
-              swapped = false;
+              setArray(generateRandomArray(e.target.value, bars, masterTl));
               animations = [];
+              currentStep = 0;
+              setCurrentStateStep(0);
             }}
-            className="accent-indigo-300 w-20 size-1 mx-2"
+            className="accent-indigo- 300 w-20 size-1 mx-2"
           />
           <span className="text-right w-2">{arraySize}</span>
         </div>
-
         <button>Algorithm</button>
-
         <button
           className="bg-indigo-300 rounded-md p-1 text-black "
           onClick={() => {
@@ -106,24 +89,34 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
         >
           Bubble Sort
         </button>
+        {/* playback contorl buttons */}
+
+        {/* TODO: Fix Bug / When + is pressed the 2nd step is displayed not the first */}
         <button
           className="bg-indigo-300 rounded-md p-1 text-black "
           onClick={() => {
-            masterTl.seek(masterTl.time() + 1);
-            masterTl.pause()
+            currentStep >= 0 && 2 * currentStep + 1 < masterTl.duration()
+              ? ++currentStep
+              : currentStep;
+            masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
+            setCurrentStateStep(currentStep);
+            masterTl.duration(0);
           }}
-          >
+        >
           +
         </button>
         <button
           className="bg-indigo-300 rounded-md p-1 text-black "
           onClick={() => {
-            masterTl.pause()
-            masterTl.seek(masterTl.time() - 1);
+            currentStep > 0 ? --currentStep : currentStep;
+            masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
+            setCurrentStateStep(currentStep);
+            masterTl.duration(0);
           }}
         >
           -
         </button>
+        <div>{currentStateStep}</div>
       </div>
     </div>
   );
