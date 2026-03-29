@@ -5,12 +5,10 @@ let currentStep = 0;
 export const comparisonAnimation = (
   firstTarget,
   secondTarget,
-  speed,
   type,
   masterTl
 ) => {
   const tl = gsap.timeline();
-  tl.timeScale(speed);
 
   if (type === "comparison") {
     masterTl.addLabel(`step-${currentStep}`, currentStep);

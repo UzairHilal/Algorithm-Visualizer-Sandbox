@@ -1,6 +1,8 @@
 import { comparisonAnimation } from "../engine/animations";
 
-export const animationGenerator = (speed, animations, bars, masterTl) => {
+export let bars = [];
+
+export const animationGenerator = (speed, animations, masterTl) => {
   bars = Array.from(document.getElementsByClassName("bars"));
   const tempBars = [...bars];
   for (let i = 0; i <= animations.length - 1; i++) {
@@ -11,10 +13,10 @@ export const animationGenerator = (speed, animations, bars, masterTl) => {
     const barB = tempBars[bar2Index];
 
     masterTl.add(
-      comparisonAnimation(barA, barB, speed, "comparison", masterTl, i)
+      comparisonAnimation(barA, barB, "comparison", masterTl, i)
     );
     if (animations[i].swap) {
-      masterTl.add(comparisonAnimation(barA, barB, speed, "swap", masterTl, i));
+      masterTl.add(comparisonAnimation(barA, barB, "swap", masterTl, i));
       [tempBars[bar1Index], tempBars[bar2Index]] = [
         tempBars[bar2Index],
         tempBars[bar1Index],
