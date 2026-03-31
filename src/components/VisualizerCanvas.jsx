@@ -11,17 +11,19 @@ const VisualizerCanvas = ({ array, arraySize }) => {
 
   useGSAP(() => {
     gsap.fromTo(
-      ".bars",
-      {
-        height: 5,
-      },
-
+      ".bars", {
+      height: 5,
+      background: "white"
+    }
+      ,
       {
         height: (i, el) => el.dataset.height + "px",
+        background: "cyan",
+        duration: 0.3,
+        stagger: 0.1
       }
     );
   }, [randomArray]);
-
   return (
     <div className="w-full flex flex-col justify-center">
       {/* bar display */}
