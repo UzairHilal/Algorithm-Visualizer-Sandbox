@@ -96,3 +96,7 @@ export const comparisonAnimation = (
   }
   return tl;
 };
+
+export const resetCurrentStep = () => {
+  currentStep = 0;
+};

@@ -3,7 +3,7 @@ import { generateRandomArray } from "../constants";
 import { bubbleSort } from "../algorithms/Sorting/BubbleSort";
 import { selectionSort } from "../algorithms/Sorting/SelectionSort";
 import { animationGenerator } from "../engine/animationGenerator";
-import {bars} from "../engine/animationGenerator"
+import { bars } from "../engine/animationGenerator";
 import gsap from "gsap";
 
 let currentStep = 0;
@@ -21,18 +21,18 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
     if (!masterTl.isActive()) {
       bubbleSort(array, animations);
       animationGenerator(speed, animations, masterTl);
-      masterTl.duration(speed)
+      masterTl.duration(speed);
       masterTl.play();
       currentStep = masterTl.duration() / 2;
       setCurrentStateStep(masterTl.duration() / 2);
     }
   };
-  
+
   const handleSelectionSort = () => {
     if (!masterTl.isActive()) {
       selectionSort(array, animations);
       animationGenerator(speed, animations, masterTl);
-      masterTl.duration(speed)
+      masterTl.duration(speed);
       masterTl.play();
       currentStep = masterTl.duration() / 2;
       setCurrentStateStep(masterTl.duration() / 2);
@@ -95,6 +95,17 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
         <button
           className="bg-indigo-300 rounded-md p-1 text-black "
           onClick={() => {
+            currentStep > 0 ? --currentStep : currentStep;
+            masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
+            setCurrentStateStep(currentStep);
+            masterTl.duration(0);
+          }}
+        >
+          {"<"}
+        </button>
+        <button
+          className="bg-indigo-300 rounded-md p-1 text-black "
+          onClick={() => {
             currentStep >= 0 && 2 * currentStep + 1 < masterTl.duration()
               ? ++currentStep
               : currentStep;
@@ -103,18 +114,20 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
             masterTl.duration(0);
           }}
         >
-          +
+          {">"}
         </button>
         <button
           className="bg-indigo-300 rounded-md p-1 text-black "
           onClick={() => {
-            currentStep > 0 ? --currentStep : currentStep;
-            masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
-            setCurrentStateStep(currentStep);
-            masterTl.duration(0);
+            console.log(currentStep)
+            masterTl.duration(speed)
+            masterTl.tweenFromTo(`step-${2 * currentStep + 1}`).play();
+            currentStep = masterTl.duration()/2
+            
+            setCurrentStateStep(masterTl.duration()/2);
           }}
         >
-          -
+          ||
         </button>
         <div>{currentStateStep}</div>
       </div>
