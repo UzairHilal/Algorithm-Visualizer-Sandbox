@@ -3,12 +3,12 @@ const ArrayBars = ({ randomArray, maxValueInArray, barsRef, arraySize }) => {
     <div className="w-full h-[60vh] flex items-end justify-center bg-gray-700">
       {randomArray.map((elem, i) => (
         <div
-          data-height={`${elem / ((0.2 / 100) * maxValueInArray)}`}
+          data-height={`${elem / ((0.39 / 100) * maxValueInArray)}`}
           ref={(el) => (barsRef.current[i] = el)}
-          className={`bars max-w-20 border border-black rounded-t-sm bg-cyan-600 flex items-end justify-center relative `}
+          className={`bars max-w-20 border border-black rounded-t-sm bg-cyan-600 flex items-end justify-center relative mx-0.5`}
           key={i}
           style={{
-            width: `${700 / randomArray.length}px`,
+            width: `${200 / randomArray.length}px`,
           }}
         >
           <p
