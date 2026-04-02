@@ -12,11 +12,12 @@ const ArrayBars = ({ randomArray, maxValueInArray, barsRef, arraySize }) => {
           }}
         >
           <p
-            className={`w-8 h-8 opacity-100 absolute -bottom-[50px] flex justify-center items-center transition-all ${
-              arraySize >= 10
-                ? `-rotate-45 text-[12px] border-none`
-                : `rotate-0`
-            }border-2 p-2 border-gray-500  text-gray-200`}
+            className={`w-8 h-8 opacity-100 absolute -bottom-[50px] flex items-center transition-all ${arraySize < 8 && `justify-center`} ${
+              (arraySize >= 8 &&
+                arraySize <= 14 &&
+                `-rotate-45 justify-center text-[12px] border-none`)
+            } ${arraySize >= 15 && `-rotate-90 justify-end text-[10px] border-none`} 
+           text-gray-200`}
           >
             {elem}
           </p>
