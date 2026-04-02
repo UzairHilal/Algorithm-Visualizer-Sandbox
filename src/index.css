@@ -14,8 +14,6 @@ body {
   height: 100vh;
   overflow-x: hidden;
   background: #000;
-  border:1px solid;
-  border-color: #3b3b3b;
   user-select: none;
   overflow:hidden;
 }

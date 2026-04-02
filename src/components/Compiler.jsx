@@ -1,6 +1,6 @@
-const Compiler = () => {
+const Compiler = ({className}) => {
   return (
-    <div className="w-0 h-full sm:w-64 lg:w-96 border-2 border-gray-600 bg-gray-950 overflow-hidden">
+    <div className={`absolute top-0 translate-x-1 h-full sm:relative sm:w-64 lg:w-96 border border-gray-600 bg-gray-950 p-5 overflow-hidden ${className}`}>
       <h1>Compiler</h1>
     </div>
   );

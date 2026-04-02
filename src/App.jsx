@@ -28,19 +28,18 @@ const App = () => {
         speed={speed}
         setSpeed={setSpeed}
       />
-      <div className="flex h-full">
-        <div className="flex-1">
-          <VisualizationCanvas array={array} arraySize={arraySize} />
-          <div>
-            {/* <InfoPanel /> */}
+      <div className="flex ">
+        <div className="flex-1 ">
+          <div className="border border-gray-500 rounded-md my-1 ml-1">
+            <VisualizationCanvas array={array} arraySize={arraySize} />
             <Controls />
           </div>
-          <div className="h-full">
-            <InfoPanel className="infopanel" />
+          <div className="h-[19.6rem] ml-1">
+            <InfoPanel className="infopanel border border-gray-500 rounded-md" />
           </div>
         </div>
-        <div>
-          <Compiler />
+        <div className="mt-1 mr-1">
+          <Compiler className="border mr-1 border-gray-500 rounded-md" />
         </div>
       </div>
       <Footer />
