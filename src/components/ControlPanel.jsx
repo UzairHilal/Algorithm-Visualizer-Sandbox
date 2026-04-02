@@ -1,122 +1,183 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { generateRandomArray } from "../constants";
 import { bubbleSort } from "../algorithms/Sorting/BubbleSort";
 import { selectionSort } from "../algorithms/Sorting/SelectionSort";
-import { animationGenerator } from "../engine/animationGenerator";
-import {bars} from "../engine/animationGenerator"
+import { animationGenerator, bars } from "../engine/animationGenerator";
 import gsap from "gsap";
-
-let currentStep = 0;
-let animations = [];
 
 const masterTl = gsap.timeline({ paused: true });
 
-const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
+const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed, setSpeed }) => {
+
+  const animations = useRef([]);
+  const currentStep = useRef(0);
+
+  const [currentStateStep, setCurrentStateStep] = useState(0);
+
   useEffect(() => {
+  masterTl.timeScale(speed / 100);
+}, [speed]);
+
+  useEffect(() => {
+    masterTl.clear();
+    animations.current = [];
+    currentStep.current = 0;
+    setCurrentStateStep(0);
+
     setArray(generateRandomArray(arraySize, bars, masterTl));
   }, [arraySize, setArray]);
-  const [currentStateStep, setCurrentStateStep] = useState(currentStep);
 
   const handleBubbleSort = () => {
     if (!masterTl.isActive()) {
-      bubbleSort(array, animations);
-      animationGenerator(speed, animations, masterTl);
-      masterTl.duration(speed)
+
+      animations.current = [];
+      masterTl.clear();
+
+      bubbleSort(array, animations.current);
+      animationGenerator(speed, animations.current, masterTl);
+
+      masterTl.timeScale(speed / 100); 
       masterTl.play();
-      currentStep = masterTl.duration() / 2;
-      setCurrentStateStep(masterTl.duration() / 2);
-    }
-  };
-  
-  const handleSelectionSort = () => {
-    if (!masterTl.isActive()) {
-      selectionSort(array, animations);
-      animationGenerator(speed, animations, masterTl);
-      masterTl.duration(speed)
-      masterTl.play();
-      currentStep = masterTl.duration() / 2;
-      setCurrentStateStep(masterTl.duration() / 2);
+
+      currentStep.current = Math.floor(masterTl.duration() / 2);
+      setCurrentStateStep(currentStep.current);
     }
   };
 
+  const handleSelectionSort = () => {
+    if (!masterTl.isActive()) {
+
+      animations.current = [];
+      masterTl.clear();
+
+      selectionSort(array, animations.current);
+      animationGenerator(speed, animations.current, masterTl);
+
+      masterTl.timeScale(speed / 100); 
+      masterTl.play();
+
+      currentStep.current = Math.floor(masterTl.duration() / 2);
+      setCurrentStateStep(currentStep.current);
+    }
+  };
+
+  const generateArray = () => {
+    masterTl.clear();
+    animations.current = [];
+    currentStep.current = 0;
+    setCurrentStateStep(0);
+
+    setArray(generateRandomArray(arraySize, bars, masterTl));
+  };
+
+  const stepForward = () => {
+
+    if (2 * currentStep.current + 1 < masterTl.duration()) {
+      currentStep.current++;
+    }
+
+    masterTl.tweenTo(`step-${2 * currentStep.current + 1}`);
+
+    setCurrentStateStep(currentStep.current);
+  };
+
+  const stepBackward = () => {
+
+    if (currentStep.current > 0) {
+      currentStep.current--;
+    }
+
+    masterTl.tweenTo(`step-${2 * currentStep.current + 1}`);
+
+    setCurrentStateStep(currentStep.current);
+  };
+
   return (
-    <div className="z-10 w-full py-3 flex bg-gray-800 overflow-hidden">
-      <div className="w-full px-6 flex justify-between text-sm font-bold">
+    <div className="z-10 w-full py-3 bg-gray-800">
+
+      <div className="w-full px-4 flex flex-wrap gap-3 items-center justify-between text-sm font-bold">
+
+        {/* Generate Array */}
         <button
-          onClick={() => {
-            animations = [];
-            setArray(generateRandomArray(arraySize, bars, masterTl));
-            currentStep = 0;
-            setCurrentStateStep(0);
-          }}
-          className="bg-indigo-300 rounded-md p-1 text-black "
+          onClick={generateArray}
+          className="px-4 py-2 bg-[#406093] text-white rounded-md hover:bg-green-700 transition"
         >
           Generate Array
         </button>
-        {/* SEt the size/length of array */}
-        <div className="flex  justify-center items-center ">
+
+        {/* Array Size */}
+        <div className="flex items-center gap-2">
+
           <label htmlFor="range">Array Size</label>
+
           <input
             type="range"
             min={5}
             max={30}
-            defaultValue={5}
+            value={arraySize}
             onChange={(e) => {
-              setArraySize(e.target.value);
-              setArray(generateRandomArray(e.target.value, bars, masterTl));
-              animations = [];
-              currentStep = 0;
-              setCurrentStateStep(0);
+              const value = Number(e.target.value);
+              setArraySize(value);
             }}
-            className="accent-indigo- 300 w-20 size-1 mx-2"
+            className="accent-indigo-300 w-24 h-1"
           />
-          <span className="text-right w-2">{arraySize}</span>
+
+          <span className="w-6 text-center">{arraySize}</span>
+
         </div>
-        <button>Algorithm</button>
+
+        {/* manage speed  */}
+        <div className="flex flex-row justify-center items-center gap-3">
+          <label htmlFor="speed">Speed</label>
+          <input
+            type="range"
+            className="accent-indigo-300 w-24 h-1"
+            value={speed}
+            min={100}
+            max={500}
+            onChange={(e) => {
+              setSpeed(Number(e.target.value));
+            }}
+          />
+          <span>{(speed / 100).toFixed(1)}x</span>
+        </div>
+        {/* Sorting Buttons */}
+
         <button
-          className="bg-indigo-300 rounded-md p-1 text-black "
-          onClick={() => {
-            handleSelectionSort();
-          }}
+          className="px-3 py-1 bg-indigo-400 rounded-md text-black hover:bg-indigo-500"
+          onClick={handleSelectionSort}
         >
           Selection Sort
         </button>
+
         <button
-          className="bg-indigo-300 rounded-md p-1 text-black "
-          onClick={() => {
-            handleBubbleSort();
-          }}
+          className="px-3 py-1 bg-indigo-400 rounded-md text-black hover:bg-indigo-500"
+          onClick={handleBubbleSort}
         >
           Bubble Sort
         </button>
-        {/* playback contorl buttons */}
 
-        {/* TODO: Fix Bug / When + is pressed the 2nd step is displayed not the first */}
-        <button
-          className="bg-indigo-300 rounded-md p-1 text-black "
-          onClick={() => {
-            currentStep >= 0 && 2 * currentStep + 1 < masterTl.duration()
-              ? ++currentStep
-              : currentStep;
-            masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
-            setCurrentStateStep(currentStep);
-            masterTl.duration(0);
-          }}
+        {/* Playback Controls */}
+
+        {/* <button
+          className="px-3 py-1 bg-indigo-300 rounded-md text-black hover:bg-indigo-400"
+          onClick={stepForward}
         >
           +
         </button>
+
         <button
-          className="bg-indigo-300 rounded-md p-1 text-black "
-          onClick={() => {
-            currentStep > 0 ? --currentStep : currentStep;
-            masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
-            setCurrentStateStep(currentStep);
-            masterTl.duration(0);
-          }}
+          className="px-3 py-1 bg-indigo-300 rounded-md text-black hover:bg-indigo-400"
+          onClick={stepBackward}
         >
           -
-        </button>
-        <div>{currentStateStep}</div>
+        </button> */}
+
+        {/* Current Step */}
+        <div className="px-2">
+          Step: {currentStateStep}
+        </div>
+
       </div>
     </div>
   );

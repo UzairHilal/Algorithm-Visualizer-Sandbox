@@ -13,14 +13,11 @@ const VisualizerCanvas = ({ array, arraySize }) => {
     gsap.fromTo(
       ".bars", {
       height: 5,
-      background: "white"
+  
     }
       ,
       {
         height: (i, el) => el.dataset.height + "px",
-        background: "cyan",
-        duration: 0.3,
-        stagger: 0.1
       }
     );
   }, [randomArray]);
