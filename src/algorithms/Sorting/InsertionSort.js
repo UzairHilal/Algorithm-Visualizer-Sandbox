@@ -1,36 +1,33 @@
 export const insertionSort = (arr, animations) => {
-    const n = arr.length;
-    // We start from the second element (index 1)
+    const a = [...arr]; // Create a copy to avoid mutating the original until sorted
+    const n = a.length;
+
     for (let i = 1; i < n; i++) {
-        let key = arr[i];
+        let key = a[i];
         let j = i - 1;
 
-        // Record the 'selection' of the current key
-        animations.push({ type: 'comparison', indices: [i, j] });
+        // We compare the current 'key' with the element before it
+        while (j >= 0 && a[j] > key) {
+            const anim = {};
+            anim.comparison = [j, j + 1];
+            anim.swap = true; // We treat the shift as a swap for the visualizer
+            animations.push(anim);
 
-        while (j >= 0 && arr[j] > key) {
-            // Record that we are comparing and then shifting
-            animations.push({ type: 'comparison', indices: [j, j + 1] });
-
-            arr[j + 1] = arr[j];
-
-            // Record the shift for the visualizer
-            animations.push({
-                type: 'shift',
-                index: j + 1,
-                value: arr[j]
-            });
-
+            // Shifting the element
+            a[j + 1] = a[j];
             j = j - 1;
         }
-        arr[j + 1] = key;
 
         // Record the final placement of the key
-        animations.push({
-            type: 'place',
-            index: j + 1,
-            value: key
-        });
+        // Even if no shift happened, we show the comparison
+        if (j + 1 !== i) {
+            a[j + 1] = key;
+        } else {
+            const anim = {};
+            anim.comparison = [i, i]; // Highlighting the key stays in place
+            anim.swap = false;
+            animations.push(anim);
+        }
     }
-    return arr;
+    return a;
 };
