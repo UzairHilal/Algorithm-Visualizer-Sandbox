@@ -10,7 +10,7 @@ const App = () => {
   const [array, setArray] = useState([5]);
   const [currentAlgorithm, setCurrentAlgorithm] = useState("BubbleSort");
   const [arraySize, setArraySize] = useState(5);
-  const [speed, setSpeed] = useState(400);  // 100 = 1x , 200 =2x , 300 = 3x etc
+  const [speed, setSpeed] = useState(5);  // 100 = 1x , 200 =2x , 300 = 3x etc
 
   return (
     <main className=" bg-gray-900 h-[100vh]">

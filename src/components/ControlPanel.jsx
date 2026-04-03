@@ -3,47 +3,20 @@ import { generateRandomArray } from "../constants/index";
 import { bars } from "../engine/animationGenerator";
 import { resetCurrentStep } from "../engine/animations";
 
-const ControlPanel = ({ setArray, arraySize, setArraySize }) => {
+const ControlPanel = ({
+  setArray,
+  arraySize,
+  setArraySize,
+  speed,
+  setSpeed,
+}) => {
   useEffect(() => {
     setArray(generateRandomArray(arraySize, bars));
   }, [arraySize, setArray]);
 
-  const generateArray = () => {
-    masterTl.clear();
-    animations.current = [];
-    currentStep.current = 0;
-    setCurrentStateStep(0);
-
-    setArray(generateRandomArray(arraySize, bars, masterTl));
-  };
-
-  const stepForward = () => {
-
-    if (2 * currentStep.current + 1 < masterTl.duration()) {
-      currentStep.current++;
-    }
-
-    masterTl.tweenTo(`step-${2 * currentStep.current + 1}`);
-
-    setCurrentStateStep(currentStep.current);
-  };
-
-  const stepBackward = () => {
-
-    if (currentStep.current > 0) {
-      currentStep.current--;
-    }
-
-    masterTl.tweenTo(`step-${2 * currentStep.current + 1}`);
-
-    setCurrentStateStep(currentStep.current);
-  };
-
   return (
     <div className="z-10 w-full py-3 bg-gray-800">
-
-      <div className="w-full px-4 flex flex-wrap gap-3 items-center justify-between text-sm font-bold">
-
+      <div className="w-full px-4 flex gap-3 items-center justify-between text-sm font-bold">
         {/* Generate Array */}
         <button
           onClick={() => {
@@ -51,14 +24,13 @@ const ControlPanel = ({ setArray, arraySize, setArraySize }) => {
             resetCurrentStep();
             // setCurrentStateStep(0);
           }}
-          className="bg-indigo-300 rounded-md p-1 text-black "
+          className="text-xs sm:text-base bg-indigo-300 rounded-md p-1 text-black "
         >
           Generate Array
         </button>
 
         {/* Array Size */}
-        <div className="flex items-center gap-2">
-
+        <div className="text-xs sm:text-base flex items-center gap-2">
           <label htmlFor="range">Array Size</label>
 
           <input
@@ -74,24 +46,20 @@ const ControlPanel = ({ setArray, arraySize, setArraySize }) => {
           />
 
           <span className="w-6 text-center">{arraySize}</span>
-
         </div>
 
         {/* manage speed  */}
-        <div className="flex flex-row justify-center items-center gap-3">
+        <div className="flex flex-row justify-center items-center gap-3 text-xs sm:text-base">
           <label htmlFor="speed">Speed</label>
           <input
             type="range"
             className="accent-indigo-300 w-24 h-1"
             value={speed}
+            step={1}
             min={100}
             max={500}
             onChange={(e) => {
               setSpeed(Number(e.target.value));
-              setArraySize(e.target.value);
-              setArray(generateRandomArray(e.target.value, bars));
-              resetCurrentStep();
-              // setCurrentStateStep(0);
             }}
           />
           <span>{(speed / 100).toFixed(1)}x</span>
