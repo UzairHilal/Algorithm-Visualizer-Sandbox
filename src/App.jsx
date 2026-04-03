@@ -8,7 +8,7 @@ import { useState } from "react";
 import InfoPanel from "./components/InfoPanel";
 const App = () => {
   const [array, setArray] = useState([5]);
-  const [algorithm, setAlgorithm] = useState();
+  const [currentAlgorithm, setCurrentAlgorithm] = useState("BubbleSort");
   const [arraySize, setArraySize] = useState(5);
   const [speed, setSpeed] = useState(5);
 
@@ -19,10 +19,8 @@ const App = () => {
       <ControlPanel
         array={array}
         setArray={setArray}
-        algorithm={algorithm}
         arraySize={arraySize}
         setArraySize={setArraySize}
-        setAlgorithm={setAlgorithm}
         speed={speed}
         setSpeed={setSpeed}
       />
@@ -30,7 +28,16 @@ const App = () => {
         <div className="flex-1 ">
           <div className="border border-gray-500 rounded-md my-1 ml-1">
             <VisualizationCanvas array={array} arraySize={arraySize} />
-            <Controls />
+            <Controls
+              currentAlgorithm={currentAlgorithm}
+              setCurrentAlgorithm={setCurrentAlgorithm}
+              array={array}
+              setArray={setArray}
+              arraySize={arraySize}
+              setArraySize={setArraySize}
+              speed={speed}
+              setSpeed={setSpeed}
+            />
           </div>
           <div className="h-[19.6rem] ml-1">
             <InfoPanel className="infopanel border border-gray-500 rounded-md" />
