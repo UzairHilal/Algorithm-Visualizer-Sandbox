@@ -1,65 +1,12 @@
-import { useEffect, useState, useRef } from "react";
-import { generateRandomArray } from "../constants";
-import { bubbleSort } from "../algorithms/Sorting/BubbleSort";
-import { selectionSort } from "../algorithms/Sorting/SelectionSort";
-import { animationGenerator, bars } from "../engine/animationGenerator";
-import gsap from "gsap";
+import { useEffect } from "react";
+import { generateRandomArray } from "../constants/index";
+import { bars } from "../engine/animationGenerator";
+import { resetCurrentStep } from "../engine/animations";
 
-const masterTl = gsap.timeline({ paused: true });
-
-const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed, setSpeed }) => {
-
-  const animations = useRef([]);
-  const currentStep = useRef(0);
-
-  const [currentStateStep, setCurrentStateStep] = useState(0);
-
+const ControlPanel = ({ setArray, arraySize, setArraySize }) => {
   useEffect(() => {
-  masterTl.timeScale(speed / 100);
-}, [speed]);
-
-  useEffect(() => {
-    masterTl.clear();
-    animations.current = [];
-    currentStep.current = 0;
-    setCurrentStateStep(0);
-
-    setArray(generateRandomArray(arraySize, bars, masterTl));
+    setArray(generateRandomArray(arraySize, bars));
   }, [arraySize, setArray]);
-
-  const handleBubbleSort = () => {
-    if (!masterTl.isActive()) {
-
-      animations.current = [];
-      masterTl.clear();
-
-      bubbleSort(array, animations.current);
-      animationGenerator(speed, animations.current, masterTl);
-
-      masterTl.timeScale(speed / 100); 
-      masterTl.play();
-
-      currentStep.current = Math.floor(masterTl.duration() / 2);
-      setCurrentStateStep(currentStep.current);
-    }
-  };
-
-  const handleSelectionSort = () => {
-    if (!masterTl.isActive()) {
-
-      animations.current = [];
-      masterTl.clear();
-
-      selectionSort(array, animations.current);
-      animationGenerator(speed, animations.current, masterTl);
-
-      masterTl.timeScale(speed / 100); 
-      masterTl.play();
-
-      currentStep.current = Math.floor(masterTl.duration() / 2);
-      setCurrentStateStep(currentStep.current);
-    }
-  };
 
   const generateArray = () => {
     masterTl.clear();
@@ -99,8 +46,12 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed, setSpee
 
         {/* Generate Array */}
         <button
-          onClick={generateArray}
-          className="px-4 py-2 bg-[#406093] text-white rounded-md hover:bg-green-700 transition"
+          onClick={() => {
+            setArray(generateRandomArray(arraySize, bars));
+            resetCurrentStep();
+            // setCurrentStateStep(0);
+          }}
+          className="bg-indigo-300 rounded-md p-1 text-black "
         >
           Generate Array
         </button>
@@ -137,47 +88,14 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed, setSpee
             max={500}
             onChange={(e) => {
               setSpeed(Number(e.target.value));
+              setArraySize(e.target.value);
+              setArray(generateRandomArray(e.target.value, bars));
+              resetCurrentStep();
+              // setCurrentStateStep(0);
             }}
           />
           <span>{(speed / 100).toFixed(1)}x</span>
         </div>
-        {/* Sorting Buttons */}
-
-        <button
-          className="px-3 py-1 bg-indigo-400 rounded-md text-black hover:bg-indigo-500"
-          onClick={handleSelectionSort}
-        >
-          Selection Sort
-        </button>
-
-        <button
-          className="px-3 py-1 bg-indigo-400 rounded-md text-black hover:bg-indigo-500"
-          onClick={handleBubbleSort}
-        >
-          Bubble Sort
-        </button>
-
-        {/* Playback Controls */}
-
-        {/* <button
-          className="px-3 py-1 bg-indigo-300 rounded-md text-black hover:bg-indigo-400"
-          onClick={stepForward}
-        >
-          {"<"}
-        </button>
-
-        <button
-          className="px-3 py-1 bg-indigo-300 rounded-md text-black hover:bg-indigo-400"
-          onClick={stepBackward}
-        >
-          -
-        </button> */}
-
-        {/* Current Step */}
-        <div className="px-2">
-          Step: {currentStateStep}
-        </div>
-
       </div>
     </div>
   );
