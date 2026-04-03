@@ -163,7 +163,7 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed, setSpee
           className="px-3 py-1 bg-indigo-300 rounded-md text-black hover:bg-indigo-400"
           onClick={stepForward}
         >
-          +
+          {"<"}
         </button>
 
         <button

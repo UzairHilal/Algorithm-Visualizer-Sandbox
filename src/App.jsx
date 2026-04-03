@@ -1,3 +1,5 @@
+import { insertionSort } from './algorithms/Sorting/InsertionSort';
+import { algorithmInfo } from './constants/algorithmInfo';
 import Header from "./components/Header";
 import ControlPanel from "./components/ControlPanel";
 import VisualizationCanvas from "./components/VisualizerCanvas";
