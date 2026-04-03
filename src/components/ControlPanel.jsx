@@ -8,9 +8,43 @@ const ControlPanel = ({ setArray, arraySize, setArraySize }) => {
     setArray(generateRandomArray(arraySize, bars));
   }, [arraySize, setArray]);
 
+  const generateArray = () => {
+    masterTl.clear();
+    animations.current = [];
+    currentStep.current = 0;
+    setCurrentStateStep(0);
+
+    setArray(generateRandomArray(arraySize, bars, masterTl));
+  };
+
+  const stepForward = () => {
+
+    if (2 * currentStep.current + 1 < masterTl.duration()) {
+      currentStep.current++;
+    }
+
+    masterTl.tweenTo(`step-${2 * currentStep.current + 1}`);
+
+    setCurrentStateStep(currentStep.current);
+  };
+
+  const stepBackward = () => {
+
+    if (currentStep.current > 0) {
+      currentStep.current--;
+    }
+
+    masterTl.tweenTo(`step-${2 * currentStep.current + 1}`);
+
+    setCurrentStateStep(currentStep.current);
+  };
+
   return (
-    <div className="z-10 w-full py-3 flex bg-gray-800 overflow-hidden">
-      <div className="w-full px-6 flex justify-between text-sm font-bold">
+    <div className="z-10 w-full py-3 bg-gray-800">
+
+      <div className="w-full px-4 flex flex-wrap gap-3 items-center justify-between text-sm font-bold">
+
+        {/* Generate Array */}
         <button
           onClick={() => {
             setArray(generateRandomArray(arraySize, bars));
@@ -21,23 +55,46 @@ const ControlPanel = ({ setArray, arraySize, setArraySize }) => {
         >
           Generate Array
         </button>
-        {/* SEt the size/length of array */}
-        <div className="flex  justify-center items-center ">
+
+        {/* Array Size */}
+        <div className="flex items-center gap-2">
+
           <label htmlFor="range">Array Size</label>
+
           <input
             type="range"
             min={5}
             max={30}
-            defaultValue={5}
+            value={arraySize}
             onChange={(e) => {
+              const value = Number(e.target.value);
+              setArraySize(value);
+            }}
+            className="accent-indigo-300 w-24 h-1"
+          />
+
+          <span className="w-6 text-center">{arraySize}</span>
+
+        </div>
+
+        {/* manage speed  */}
+        <div className="flex flex-row justify-center items-center gap-3">
+          <label htmlFor="speed">Speed</label>
+          <input
+            type="range"
+            className="accent-indigo-300 w-24 h-1"
+            value={speed}
+            min={100}
+            max={500}
+            onChange={(e) => {
+              setSpeed(Number(e.target.value));
               setArraySize(e.target.value);
               setArray(generateRandomArray(e.target.value, bars));
               resetCurrentStep();
               // setCurrentStateStep(0);
             }}
-            className="accent-indigo- 300 w-20 size-1 mx-2"
           />
-          <span className="text-right w-2">{arraySize}</span>
+          <span>{(speed / 100).toFixed(1)}x</span>
         </div>
       </div>
     </div>
