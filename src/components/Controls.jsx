@@ -1,21 +1,64 @@
 import Button from "./ui/Button";
-import gsap from "gsap"
-import { handleSortingAnimationGenerator } from "../constants";
+import { useState } from "react";
+import {
+  handleSortingAnimationGenerator,
+  handleStepBack,
+  handleStepForward,
+} from "../utils/playback";
+import { getMasterTl } from "../utils/playback";
 
-let animations = [];
+let currentStep = 0;
 
-const masterTl = gsap.timeline({ paused: true });
-
-const Controls = ({ currentAlgorithm, setCurrentAlgorithm, array, speed, currentStep,setCurrentStateStep }) => {
+const Controls = ({ currentAlgorithm, setCurrentAlgorithm, array, speed }) => {
+  const [currentStateStep, setCurrentStateStep] = useState(currentStep);
   return (
     <div className="flex justify-center items-center opacity-100 bg-gray-700">
-      <div className="py-7 flex flex-row  justify-between text-xs bottom-10 opacity-100 transition-all px-9">
-        <Button title={"<"} className="" onClick={() => alert("hello")} />
-        <Button title={"Play"} onClick={() => {
-          handleSortingAnimationGenerator(array,animations, speed, currentStep,setCurrentStateStep);
-        }}/>
-        <Button title={"Pause"} />
-        <Button title={">"} />
+      <div className="py-7 flex flex-row justify-between text-xs bottom-10 opacity-100 transition-all items-center px-9">
+        <div className="w-10 h-10 px-2 flex justify-center items-center">{`${currentStateStep}/${
+          getMasterTl().duration() / 2
+        }`}</div>
+        <Button
+          title={"<"}
+          className=""
+          onClick={() => {
+            currentStep = handleStepBack(setCurrentStateStep, currentStep);
+          }}
+        />
+        <Button
+          title={
+            getMasterTl().duration() == 0 && !getMasterTl().isActive()
+              ? "Play"
+              : "Pause"
+          }
+          onClick={() => {
+            const tempMasterTl = getMasterTl();
+            if (tempMasterTl.duration() == 0 && !tempMasterTl.isActive()) {
+              currentStep = handleSortingAnimationGenerator(
+                array,
+                speed,
+                currentStep,
+                currentAlgorithm
+              );
+            } else if (tempMasterTl.duration() > 0 && tempMasterTl.isActive()) {
+              tempMasterTl.pause();
+            } else {
+              console.log(tempMasterTl.duration());
+              tempMasterTl.duration(speed);
+              tempMasterTl.tweenFromTo(`step-${2 * currentStep + 1}`).play();
+              currentStep = tempMasterTl.duration() / 2;
+
+              setCurrentStateStep(tempMasterTl.duration() / 2);
+            }
+            setCurrentStateStep(currentStep);
+          }}
+        />
+        <Button
+          title={">"}
+          onClick={() => {
+            currentStep = handleStepForward(setCurrentStateStep, currentStep);
+            setCurrentStateStep(currentStep);
+          }}
+        />
       </div>
 
       <div className="w-1 h-14 sm:h-10 bg-gray-600 border border-gray-500 rounded"></div>

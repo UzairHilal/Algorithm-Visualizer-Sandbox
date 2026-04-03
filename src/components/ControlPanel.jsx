@@ -1,45 +1,12 @@
-import { useEffect, useState } from "react";
-import { generateRandomArray, handleSortingAnimationGenerator } from "../constants";
-import { bubbleSort } from "../algorithms/Sorting/BubbleSort";
-import { selectionSort } from "../algorithms/Sorting/SelectionSort";
-import { animationGenerator } from "../engine/animationGenerator";
+import { useEffect } from "react";
+import { generateRandomArray } from "../constants/index";
 import { bars } from "../engine/animationGenerator";
-import gsap from "gsap";
+import { resetCurrentStep } from "../engine/animations";
 
-let currentStep = 0;
-const masterTl = gsap.timeline({ paused: true });
-
-// const handleBubbleSort = (array, speed) => {
-//       bubbleSort(array, animations);
-//       animationGenerator(speed, animations, masterTl);
-//       masterTl.duration(speed);
-//       masterTl.play();
-//       currentStep = masterTl.duration() / 2;
-//       setCurrentStateStep(masterTl.duration() / 2);
-// };
-  
-const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
+const ControlPanel = ({ setArray, arraySize, setArraySize }) => {
   useEffect(() => {
     setArray(generateRandomArray(arraySize, bars));
   }, [arraySize, setArray]);
-  const [currentStateStep, setCurrentStateStep] = useState(currentStep);
-
-    
-
-  // if (!masterTl.isActive()) {
-  //     
-  //   }
-
-  // const handleSelectionSort = () => {
-  //   if (!masterTl.isActive()) {
-  //     selectionSort(array, animations);
-  //     animationGenerator(speed, animations, masterTl);
-  //     masterTl.duration(speed);
-  //     masterTl.play();
-  //     currentStep = masterTl.duration() / 2;
-  //     setCurrentStateStep(masterTl.duration() / 2);
-  //   }
-  // };
 
   return (
     <div className="z-10 w-full py-3 flex bg-gray-800 overflow-hidden">
@@ -47,8 +14,8 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
         <button
           onClick={() => {
             setArray(generateRandomArray(arraySize, bars));
-            currentStep = 0;
-            setCurrentStateStep(0);
+            resetCurrentStep();
+            // setCurrentStateStep(0);
           }}
           className="bg-indigo-300 rounded-md p-1 text-black "
         >
@@ -65,63 +32,13 @@ const ControlPanel = ({ array, setArray, arraySize, setArraySize, speed }) => {
             onChange={(e) => {
               setArraySize(e.target.value);
               setArray(generateRandomArray(e.target.value, bars));
-              currentStep = 0;
-              setCurrentStateStep(0);
+              resetCurrentStep();
+              // setCurrentStateStep(0);
             }}
             className="accent-indigo- 300 w-20 size-1 mx-2"
           />
           <span className="text-right w-2">{arraySize}</span>
         </div>
-        <button>Algorithm</button>
-        <button
-          className="bg-indigo-300 rounded-md p-1 text-black "
-          onClick={() => {
-            currentStep = handleSortingAnimationGenerator(array, speed, currentStep,setCurrentStateStep);
-          }}
-        >
-          Bubble Sort
-        </button>
-        {/* playback contorl buttons */}
-
-        {/* TODO: Fix Bug / When + is pressed the 2nd step is displayed not the first */}
-        <button
-          className="bg-indigo-300 rounded-md p-1 text-black "
-          // onClick={() => {
-          //   currentStep > 0 ? --currentStep : currentStep;
-          //   masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
-          //   setCurrentStateStep(currentStep);
-          //   masterTl.duration(0);
-          // }}
-        >
-          {"<"}
-        </button>
-        <button
-          className="bg-indigo-300 rounded-md p-1 text-black "
-          // onClick={() => {
-          //   currentStep >= 0 && 2 * currentStep + 1 < masterTl.duration()
-          //     ? ++currentStep
-          //     : currentStep;
-          //   masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
-          //   setCurrentStateStep(currentStep);
-          //   masterTl.duration(0);
-          // }}
-        >
-          {">"}
-        </button>
-        <button
-          className="bg-indigo-300 rounded-md p-1 text-black "
-          // onClick={() => {
-          //   console.log(currentStep)
-          //   masterTl.duration(speed)
-          //   masterTl.tweenFromTo(`step-${2 * currentStep + 1}`).play();
-          //   currentStep = masterTl.duration()/2
-            
-          //   setCurrentStateStep(masterTl.duration()/2);
-          // }}
-        >
-          ||
-        </button>
-        <div>{currentStateStep}</div>
       </div>
     </div>
   );
