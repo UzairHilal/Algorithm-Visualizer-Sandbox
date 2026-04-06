@@ -24,13 +24,23 @@ const ControlPanel = ({
             resetCurrentStep();
             // setCurrentStateStep(0);
           }}
-          className="text-xs sm:text-base bg-indigo-300 rounded-md p-1 text-black "
+          className="hidden sm:block text-xs sm:text-base bg-indigo-300 rounded-md p-1 text-black "
         >
           Generate Array
         </button>
+        <button
+          onClick={() => {
+            setArray(generateRandomArray(arraySize, bars));
+            resetCurrentStep();
+            // setCurrentStateStep(0);
+          }}
+          className="sm:hidden flex justify-center text-xs bg-indigo-300 rounded-md p-1 text-black "
+        >
+          Generate
+        </button>
 
         {/* Array Size */}
-        <div className="text-xs sm:text-base flex items-center gap-2">
+        <div className="text-xs sm:text-base flex items-center gap-1">
           <label htmlFor="range">Array Size</label>
 
           <input
@@ -42,18 +52,18 @@ const ControlPanel = ({
               const value = Number(e.target.value);
               setArraySize(value);
             }}
-            className="accent-indigo-300 w-24 h-1"
+            className="accent-indigo-300 w-14 sm:w-24 h-1"
           />
 
-          <span className="w-6 text-center">{arraySize}</span>
+          <span className="w-2 text-center">{arraySize}</span>
         </div>
 
         {/* manage speed  */}
-        <div className="flex flex-row justify-center items-center gap-3 text-xs sm:text-base">
+        <div className="flex flex-row justify-center items-center gap-1 text-xs sm:text-base">
           <label htmlFor="speed">Speed</label>
           <input
             type="range"
-            className="accent-indigo-300 w-24 h-1"
+            className="accent-indigo-300 w-14 sm:w-24 h-1"
             value={speed}
             step={1}
             min={100}

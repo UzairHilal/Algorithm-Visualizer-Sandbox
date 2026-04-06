@@ -5,6 +5,7 @@ export const algorithmList = ["Sorting", "Searching", "PathFinding", "..."];
 
 // Generate random array
 export const generateRandomArray = (arraySize, bars) => {
+  console.log("hello")
   const arr = Array.from({ length: arraySize }, () =>
     Math.floor(Math.random() * (500 - 5 + 1) + 5)
   );

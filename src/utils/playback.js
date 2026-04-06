@@ -41,6 +41,22 @@ export const handleSortingAnimationGenerator = (
   return currentStep;
 };
 
+
+
+export const handleToFirstStep = (setCurrentStateStep, currentStep) => {
+  currentStep = 0
+  masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
+  setCurrentStateStep(currentStep);
+  masterTl.duration(0);
+  return currentStep;
+};
+export const handleToLastStep = (setCurrentStateStep, currentStep) => {
+  currentStep = masterTl.duration()/2
+  masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));
+  setCurrentStateStep(currentStep);
+  masterTl.duration(0);
+  return currentStep;
+};
 export const handleStepBack = (setCurrentStateStep, currentStep) => {
   currentStep > 0 ? --currentStep : currentStep;
   masterTl.seek(masterTl.tweenTo(`step-${2 * currentStep + 1}`));

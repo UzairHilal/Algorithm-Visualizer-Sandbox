@@ -59,11 +59,11 @@ const InfoPanel = ({ className, currentAlgorithm }) => {
             className={`description ${activeTab === 0 ? `block` : `hidden`}`}
           >
             <p className="w-full text-white ">
-              {algorithmInfo.insertionSort.description}
+              {algorithmInfo[currentAlgorithm].description}
             </p>
           </div>
           <div className={`working ${activeTab === 1 ? `block` : `hidden`}`}>
-            <p className="text-white">{algorithmInfo.insertionSort.working}</p>
+            <p className="text-white">{algorithmInfo[currentAlgorithm].working}</p>
           </div>
           <div
             className={`complexity ${
@@ -71,10 +71,10 @@ const InfoPanel = ({ className, currentAlgorithm }) => {
             } flex justify-center items-center gap-6 sm:justify-start`}
           >
             <p className="text-white">
-              {algorithmInfo.insertionSort.complexity.time.worst}
+              {algorithmInfo[currentAlgorithm].complexity.time.worst}
             </p>
             <img
-              src={algorithmInfo.insertionSort.complexity.image}
+              src={algorithmInfo[currentAlgorithm].complexity.image}
               alt="insertion sort complexity graph"
               className="w-56 h-56 invert"
             />

@@ -1,6 +1,6 @@
 const ArrayBars = ({ randomArray, maxValueInArray, barsRef, arraySize }) => {
   return (
-    <div className="w-full h-[60vh] flex items-end justify-center bg-gray-700">
+    <div className="w-full h-[33.5vh] flex items-end justify-center bg-gray-700">
       {randomArray.map((elem, i) => (
         <div
           data-height={`${elem / ((0.39 / 100) * maxValueInArray)}`}
@@ -12,7 +12,7 @@ const ArrayBars = ({ randomArray, maxValueInArray, barsRef, arraySize }) => {
           }}
         >
           <p
-            className={`w-8 h-8 opacity-100 absolute -bottom-[50px] flex items-center transition-all ${
+            className={`w-8 h-8 opacity-100 absolute -bottom-[50px] flex items-center transition-all  ${
               arraySize < 8 && `justify-center`
             } ${
               arraySize >= 8 &&

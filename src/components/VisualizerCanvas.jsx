@@ -22,7 +22,7 @@ const VisualizerCanvas = ({ array, arraySize }) => {
     );
   }, [randomArray]);
   return (
-    <div className="w-full h-96 sm:h-96 flex flex-col justify-center overflow-hidden rounded-md">
+    <div className="flex flex-col justify-center overflow-hidden">
       {/* bar display */}
       <ArrayBars
         randomArray={randomArray}
@@ -31,7 +31,7 @@ const VisualizerCanvas = ({ array, arraySize }) => {
         arraySize={arraySize}
       />
 
-      <div className="w-full py-8 flex justify-center bg-gray-700 "></div>
+      <div className="py-8 flex justify-center bg-gray-700 "></div>
     </div>
   );
 };
