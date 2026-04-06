@@ -24,9 +24,19 @@ const ControlPanel = ({
             resetCurrentStep();
             // setCurrentStateStep(0);
           }}
-          className="text-xs sm:text-base bg-indigo-300 rounded-md p-1 text-black "
+          className="hidden sm:block text-xs sm:text-base bg-indigo-300 rounded-md p-1 text-black "
         >
           Generate Array
+        </button>
+        <button
+          onClick={() => {
+            setArray(generateRandomArray(arraySize, bars));
+            resetCurrentStep();
+            // setCurrentStateStep(0);
+          }}
+          className="sm:hidden flex justify-center text-xs bg-indigo-300 rounded-md p-1 text-black "
+        >
+          Generate
         </button>
 
         {/* Array Size */}

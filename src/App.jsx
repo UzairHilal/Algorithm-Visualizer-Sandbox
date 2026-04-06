@@ -24,9 +24,9 @@ const App = () => {
         speed={speed}
         setSpeed={setSpeed}
       />
-      <div className="flex ">
-        <div className="flex-1 ">
-          <div className="border border-gray-500 rounded-md my-1 ml-1 h-auto">
+      <div className="flex">
+        <div className="relative flex-1 w-full">
+          <div className=" border border-gray-500 rounded-md my-1 m-1 overflow-hidden">
             <VisualizationCanvas array={array} arraySize={arraySize} />
             <Controls
               currentAlgorithm={currentAlgorithm}

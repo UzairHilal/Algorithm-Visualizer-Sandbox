@@ -4,6 +4,8 @@ import {
   handleSortingAnimationGenerator,
   handleStepBack,
   handleStepForward,
+  handleToFirstStep,
+  handleToLastStep,
 } from "../utils/playback";
 import { getMasterTl } from "../utils/playback";
 import { generateRandomArray } from "../constants";
@@ -23,10 +25,17 @@ const Controls = ({
 
   return (
     <div className="flex justify-center items-center opacity-100 bg-gray-700">
-      <div className="py-7 flex flex-row justify-between text-xs bottom-10 opacity-100 transition-all items-center px-9">
-        <div className="w-10 h-10 px-2 flex justify-center items-center">{`${currentStateStep}/${
-          getMasterTl().duration() / 2
-        }`}</div>
+      <div className="py-4 flex flex-row justify-between text-xs bottom-10 opacity-100 transition-all items-center px-3 sm:px-4 sm:gap-1 gap-2">
+        <div className="h-10 px-2 flex justify-center items-center font-mono">
+          {`${currentStateStep}/${getMasterTl().duration() / 2}`}
+        </div>
+        <Button
+          title={"<<"}
+          className=""
+          onClick={() => {
+            currentStep = handleToFirstStep(setCurrentStateStep, currentStep);
+          }}
+        />
         <Button
           title={"<"}
           className=""
@@ -69,22 +78,28 @@ const Controls = ({
             setCurrentStateStep(currentStep);
           }}
         />
+        <Button
+          title={">>"}
+          className=""
+          onClick={() => {
+            currentStep = handleToLastStep(setCurrentStateStep, currentStep);
+          }}
+        />
       </div>
 
-      <div className="w-1 h-14 sm:h-10 bg-gray-600 rounded"></div>
+      <div className="w-1 h-14 sm:h-10 border bg-gray-600 rounded"></div>
 
-      <div className="hidden lg:flex justify-between items-center text-xs opacity-100 transition-all px-9">
+      <div className="hidden lg:flex justify-between items-center text-xs opacity-100 transition-all px-2 font-mono">
         {/* <p className="mx-2 text-xs md:text-sm">Algorithm </p> */}
         <div
           name=""
           id=""
-          className="p-1 bg-gray-800 rounded-md text-xs md:text-sm"
+          className="p-1 bg-gray-800 rounded-md text-xs md:text-sm "
           defaultValue={0}
           onChange={(e) => {
             setCurrentAlgorithm(e.target.value);
             setArray(generateRandomArray(arraySize, bars));
           }}
-          onClick={() => {}}
         >
           <button className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
             BubbleSort
@@ -105,8 +120,8 @@ const Controls = ({
         </div>
       </div>
 
-      <div className="lg:hidden flex justify-between items-center text-xs opacity-100 transition-all px-9">
-        <p className="mx-2 text-xs md:text-sm">Algorithm </p>
+      <div className="lg:hidden flex justify-between items-center text-xs opacity-100 transition-all px-2">
+        {/* <p className="mx-2 text-xs md:text-sm">Algorithm </p> */}
         <select
           name=""
           id=""
@@ -116,7 +131,6 @@ const Controls = ({
             setCurrentAlgorithm(e.target.value);
             setArray(generateRandomArray(arraySize, bars));
           }}
-          onClick={() => {}}
         >
           <option className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
             BubbleSort

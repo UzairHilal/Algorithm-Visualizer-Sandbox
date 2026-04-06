@@ -1,6 +1,6 @@
 const ArrayBars = ({ randomArray, maxValueInArray, barsRef, arraySize }) => {
   return (
-    <div className="w-full h-[60vh] flex items-end justify-center bg-gray-700">
+    <div className="w-full h-[35vh] flex items-end justify-center bg-gray-700">
       {randomArray.map((elem, i) => (
         <div
           data-height={`${elem / ((0.39 / 100) * maxValueInArray)}`}
