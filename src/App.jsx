@@ -13,7 +13,7 @@ const App = () => {
   const [speed, setSpeed] = useState(5);  // 100 = 1x , 200 =2x , 300 = 3x etc
 
   return (
-    <main className=" bg-gray-900 h-[100vh]">
+    <main className=" bg-gray-900 h-[100vh] overflow-hidden">
       <Header />
       {/* TODO: Organize the props below*/}
       <ControlPanel
@@ -26,7 +26,7 @@ const App = () => {
       />
       <div className="flex ">
         <div className="flex-1 ">
-          <div className="border border-gray-500 rounded-md my-1 ml-1">
+          <div className="border border-gray-500 rounded-md my-1 ml-1 h-auto">
             <VisualizationCanvas array={array} arraySize={arraySize} />
             <Controls
               currentAlgorithm={currentAlgorithm}
@@ -40,7 +40,7 @@ const App = () => {
             />
           </div>
           <div className="h-[19.6rem] ml-1">
-            <InfoPanel className="infopanel border border-gray-500 rounded-md" />
+            <InfoPanel currentAlgorithm={currentAlgorithm} className="infopanel border border-gray-500 rounded-md" />
           </div>
         </div>
         <div className="mt-1 mr-1">

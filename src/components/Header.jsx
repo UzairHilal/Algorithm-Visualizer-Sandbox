@@ -8,7 +8,7 @@ const Header = () => {
           <strong className="text-[#91D06C] text-center text-sm md:text-xl underline md:no-underline">Algorithm Visualizer Sandbox</strong>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+        <div className="flex sm:flex-row sm:items-center gap-1 sm:gap-2">
           <div >
             <strong className="mx-2 text-xs md:text-sm lg:text-xl">Algorithm Type:</strong>
           </div>
