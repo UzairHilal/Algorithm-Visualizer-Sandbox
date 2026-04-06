@@ -1,5 +1,5 @@
 export const algorithmInfo = {
-    insertionSort: {
+    InsertionSort: {
         name: "Insertion Sort",
         description: "Builds the sorted list one item at a time by comparing each new element to the ones before it and inserting it into the correct position.",
         working: [
@@ -29,7 +29,7 @@ export const algorithmInfo = {
         ]
     },
 
-    mergeSort: {
+    MergeSort: {
         name: "Merge Sort",
         description: "A Divide and Conquer algorithm that recursively splits the array in half, sorts each half, and merges them back in sorted order.",
         working: [
@@ -57,7 +57,62 @@ export const algorithmInfo = {
         ]
     },
 
-    quickSort: {
+    BubbleSort: {
+        name: "Merge Sort",
+        description: "A Divide and Conquer algorithm that recursively splits the array in half, sorts each half, and merges them back in sorted order.",
+        working: [
+            "Divide the array into two halves by finding the midpoint.",
+            "Recursively apply merge sort to the left half.",
+            "Recursively apply merge sort to the right half.",
+            "Merge the two sorted halves: compare elements one by one and place the smaller one first.",
+            "Continue merging until the entire array is reconstructed in sorted order."
+        ],
+        complexity: {
+            time: {
+                best: "O(n log n)",
+                average: "O(n log n)",
+                worst: "O(n log n)"  // Consistent performance
+            },
+            space: "O(n)"            // Needs auxiliary array for merging
+        },
+        stable: true,
+        inPlace: false,
+        useCases: [
+            "Large datasets",
+            "Linked lists (preferred over Quick Sort)",
+            "External sorting (data too large for memory)",
+            "When stable sort is required"
+        ]
+    },
+    SelectionSort: {
+        name: "Merge Sort",
+        description: "A Divide and Conquer algorithm that recursively splits the array in half, sorts each half, and merges them back in sorted order.",
+        working: [
+            "Divide the array into two halves by finding the midpoint.",
+            "Recursively apply merge sort to the left half.",
+            "Recursively apply merge sort to the right half.",
+            "Merge the two sorted halves: compare elements one by one and place the smaller one first.",
+            "Continue merging until the entire array is reconstructed in sorted order."
+        ],
+        complexity: {
+            time: {
+                best: "O(n log n)",
+                average: "O(n log n)",
+                worst: "O(n log n)"  // Consistent performance
+            },
+            space: "O(n)"            // Needs auxiliary array for merging
+        },
+        stable: true,
+        inPlace: false,
+        useCases: [
+            "Large datasets",
+            "Linked lists (preferred over Quick Sort)",
+            "External sorting (data too large for memory)",
+            "When stable sort is required"
+        ]
+    },
+
+    QuickSort: {
         name: "Quick Sort",
         description: "A Divide and Conquer algorithm that picks a 'pivot' element and partitions the array so smaller elements go left and larger ones go right, then recursively sorts each side.",
         working: [

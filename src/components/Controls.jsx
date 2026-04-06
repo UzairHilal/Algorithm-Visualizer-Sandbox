@@ -6,11 +6,21 @@ import {
   handleStepForward,
 } from "../utils/playback";
 import { getMasterTl } from "../utils/playback";
+import { generateRandomArray } from "../constants";
+import { bars } from "../engine/animationGenerator";
 
 let currentStep = 0;
 
-const Controls = ({ currentAlgorithm, setCurrentAlgorithm, array, speed }) => {
+const Controls = ({
+  currentAlgorithm,
+  setCurrentAlgorithm,
+  array,
+  arraySize,
+  setArray,
+  speed,
+}) => {
   const [currentStateStep, setCurrentStateStep] = useState(currentStep);
+
   return (
     <div className="flex justify-center items-center opacity-100 bg-gray-700">
       <div className="py-7 flex flex-row justify-between text-xs bottom-10 opacity-100 transition-all items-center px-9">
@@ -61,43 +71,70 @@ const Controls = ({ currentAlgorithm, setCurrentAlgorithm, array, speed }) => {
         />
       </div>
 
-      <div className="w-1 h-14 sm:h-10 bg-gray-600 border border-gray-500 rounded"></div>
+      <div className="w-1 h-14 sm:h-10 bg-gray-600 rounded"></div>
 
-      <div className="flex flex-col justify-between text-xs opacity-100 transition-all px-9">
-        <div>
-          <button
-            className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500"
-            onClick={() => setCurrentAlgorithm("BubbleSort")}
-          >
-            Bubble Sort
+      <div className="hidden lg:flex justify-between items-center text-xs opacity-100 transition-all px-9">
+        {/* <p className="mx-2 text-xs md:text-sm">Algorithm </p> */}
+        <div
+          name=""
+          id=""
+          className="p-1 bg-gray-800 rounded-md text-xs md:text-sm"
+          defaultValue={0}
+          onChange={(e) => {
+            setCurrentAlgorithm(e.target.value);
+            setArray(generateRandomArray(arraySize, bars));
+          }}
+          onClick={() => {}}
+        >
+          <button className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
+            BubbleSort
           </button>
-          <button
-            className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500"
-            onClick={() => setCurrentAlgorithm("SelectionSort")}
-          >
-            Selection Sort
+          <button className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
+            SelectionSort
           </button>
-          <button
-            className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500"
-            onClick={() => setCurrentAlgorithm("InsertionSort")}
-          >
-            Insertion Sort
+          <button className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
+            InsertionSort
           </button>
-        </div>
-        <div>
-          <button
-            className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500"
-            onClick={() => setCurrentAlgorithm("QuickSort")}
-          >
-            Quick Sort
+
+          <button className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
+            QuickSort
           </button>
-          <button
-            className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500"
-            onClick={() => setCurrentAlgorithm("MergeSort")}
-          >
-            Merge Sort
+          <button className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
+            MergeSort
           </button>
         </div>
+      </div>
+
+      <div className="lg:hidden flex justify-between items-center text-xs opacity-100 transition-all px-9">
+        <p className="mx-2 text-xs md:text-sm">Algorithm </p>
+        <select
+          name=""
+          id=""
+          className="p-1 bg-gray-800 rounded-md text-xs  md:text-sm"
+          defaultValue={0}
+          onChange={(e) => {
+            setCurrentAlgorithm(e.target.value);
+            setArray(generateRandomArray(arraySize, bars));
+          }}
+          onClick={() => {}}
+        >
+          <option className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
+            BubbleSort
+          </option>
+          <option className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
+            SelectionSort
+          </option>
+          <option className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
+            InsertionSort
+          </option>
+
+          <option className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
+            QuickSort
+          </option>
+          <option className=" text-white font-bold rounded-lg px-2 py-1 hover:bg-gray-500">
+            MergeSort
+          </option>
+        </select>
       </div>
     </div>
   );
